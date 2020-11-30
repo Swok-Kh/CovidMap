@@ -1,0 +1,30 @@
+$primary-background: #455a64;
+$primary-light-background: #718792;
+$primary-dark-background: #1c313a;
+
+$secondary-background: #37474f;
+$secondary-light-background: #62727b;
+$secondary-dark-background: #102027;
+
+$primary-text-color: #ffffff;
+
+$primary-font-size: 24px;
+$large-font-size: 36px;
+
+body {
+  color: $primary-text-color;
+  background-color: $primary-background;
+  font-size: $primary-font-size;
+}
+p,
+ul,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
