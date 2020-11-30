@@ -1,7 +1,9 @@
-<h2>{{Country}}</h2>
-<ul>
-    <li>Total cases: {{TotalConfirmed}}</li>
-    <li>Total deaths: {{TotalDeaths}}</li>
-    <li>New cases: {{NewConfirmed}}</li>
-    <li>Last data: {{Date}}</li>
+<h2 class="country__title">{{Country}} - <span class="country__title--accent">{{TotalConfirmed}}</span></h2>
+<ul class="country__list">
+    <li class="country__info">Total cases: <span class="country__info--accent">{{TotalConfirmed}}</span></li>
+    <li class="country__info">Total deaths: <span class="country__info--accent">{{TotalDeaths}}</span></li>
+    <li class="country__info">Total recovered: <span class="country__info--accent">{{TotalRecovered}}</span></li>
+    <li class="country__info">New cases: <span class="country__info--accent">{{NewConfirmed}}</span></li>
+    <li class="country__info">New deaths: <span class="country__info--accent">{{NewDeaths}}</span></li>
+    <li class="country__info">New recovered: <span class="country__info--accent">{{NewRecovered}}</span></li>
 </ul>
