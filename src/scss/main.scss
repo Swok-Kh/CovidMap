@@ -4,7 +4,7 @@
 .grid-container {
   display: grid;
   grid-template-areas: 'header header header' 'main map map' 'footer footer footer';
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 25% 1fr 1fr;
   grid-template-rows: 100px auto 50px;
 }
 .header {
@@ -22,13 +22,16 @@
 .main {
   grid-area: main;
   height: calc(100vh - 150px);
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.countries-list-wrapper {
+  overflow-y: auto;
 }
 .countries-list {
   @extend %reset-list;
 }
 .country {
-  position: relative;
   background-color: $secondary-background;
   cursor: pointer;
   &__title {
@@ -38,15 +41,9 @@
     }
   }
   &__list {
-    position: absolute;
     @extend %reset-list;
-    opacity: 0;
-    top: 100%;
-    width: 100%;
-    padding: 10px;
     background-color: $secondary-dark-background;
     font-size: $small-font-size;
-    transition: opacity 500ms ease;
   }
   &__info {
     &--accent {
@@ -58,10 +55,6 @@
   }
   &:nth-child(2n + 2) {
     background-color: $secondary-light-background;
-  }
-  &:hover .country__list {
-    opacity: 0.95;
-    z-index: 1000;
   }
 }
 .map {

@@ -3,5 +3,8 @@ import { GoogleMap } from './js/googleMap';
 import { CountriesList } from './js/CountriesList';
 
 const map = new GoogleMap({ mapId: 'map' });
-const countryList = new CountriesList({ selector: '.main' });
+const countryList = new CountriesList({
+  selector: '.countries-list-wrapper',
+  extInfoSelector: '.extended-info',
+});
 countryList.bindMap(map);

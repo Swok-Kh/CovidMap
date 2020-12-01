@@ -1,10 +1,12 @@
 import countryListTemplate from '../templates/listOfCountries.hbs';
-import { requestCovidData, requestGeocode } from './Helpers';
+import extendedInfoTemplate from '../templates/extendedInfo.hbs';
+import { requestCovidData } from './Helpers';
 import countries from './countries.json';
 
 export class CountriesList {
-  constructor({ selector }) {
+  constructor({ selector, extInfoSelector }) {
     this.listRef = document.querySelector(selector);
+    this.extInfoRef = document.querySelector(extInfoSelector);
     this._list = { ...countries };
     this.init();
   }
@@ -13,23 +15,30 @@ export class CountriesList {
     this.listRef.addEventListener('click', this.clickHandler.bind(this));
   }
   async responseDataHandler() {
-    const response = await requestCovidData();
-    this.drawContent(response.Countries);
-    this.updateTotalCases(response.Countries);
-    this.dataFill(response.Countries);
+    const { Countries } = await requestCovidData();
+    this._countries = this.normalizeData(Countries);
+
+    this.drawContent();
   }
-  updateTotalCases(data) {
-    for (let index = 0; index < data.length; index += 1) {
-      if (this._list.hasOwnProperty(`${data[index].Country}`)) {
-        this._list[data[index].Country].cases = data[index].TotalConfirmed;
-      }
-    }
-    this._map.drawCircles(this._list);
+  normalizeData(data) {
+    const temp = data.map(item => {
+      if (item.Country === 'Georgia') item.Country = 'Georgia country';
+      if (item.Country === 'Togo') item.Country = 'Togolese Republic';
+      if (item.Country === 'Tanzania, United Republic of')
+        item.Country = 'United Republic of Tanzania';
+      if (item.Country === 'Jordan')
+        item.Country = 'Hashemite Kingdom of Jordan';
+      return item;
+    });
+    return temp.sort((a, b) => b.TotalConfirmed - a.TotalConfirmed);
   }
-  drawContent(data) {
-    this.listRef.innerHTML = countryListTemplate(
-      [...data].sort((a, b) => b.TotalConfirmed - a.TotalConfirmed),
-    );
+  drawContent() {
+    this.listRef.innerHTML = countryListTemplate(this._countries);
+    this._map.drawCircles(this._countries);
+    this.drawExtInfo(this._countries[0]);
+  }
+  drawExtInfo(country) {
+    this.extInfoRef.innerHTML = extendedInfoTemplate(country);
   }
   chooseCountry(target) {
     if (target.dataset.hasOwnProperty('country')) {
@@ -41,26 +50,8 @@ export class CountriesList {
     this._map = map;
   }
   clickHandler(e) {
-    this._map.panToCountry({
-      country: this.chooseCountry(e.target),
-      countryList: this._list,
-    });
-  }
-  dataFill(list) {
-    const temp = {};
-    for (let index = 0; index < list.length; index++) {
-      setTimeout(async () => {
-        const result = await requestGeocode(list[index].Country);
-        if (result.results.length === 1) {
-          temp[list[index].Country] = {
-            center: result.results[0].geometry.location,
-            bounds: result.results[0].geometry.bounds,
-          };
-        } else {
-          console.log(result.results);
-        }
-      }, 20 * index);
-    }
-    console.log();
+    const country = this.chooseCountry(e.target);
+    this.drawExtInfo(this._countries.find(item => item.Country === country));
+    this._map.panToCountry(country);
   }
 }

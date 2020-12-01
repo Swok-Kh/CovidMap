@@ -22,21 +22,41 @@ export class GoogleMap {
     document.head.append(this._script);
     this._script.onload = () => this.init();
   }
-  panToCountry({ country, countryList }) {
+  async panToCountry(country) {
+    const response = await this.geocodeHandler(country);
     this._map.setZoom(2);
     setTimeout(() => {
-      this._map.panTo(countryList[country].center);
+      this._map.panTo(response.geometry.location);
     }, 500);
-    setTimeout(async () => {
-      this._map.setZoom(this.countZoom(await requestGeocode(country)));
+    setTimeout(() => {
+      this._map.setZoom(this.countZoom(response));
     }, 1000);
   }
+  async geocodeHandler(country) {
+    const { results } = await requestGeocode(country);
+    for (let i = 0; i < results.length; i += 1) {
+      if (
+        (results[i].types.includes('country') &&
+          results[i].types.includes('political')) ||
+        (results[i].types.includes('locality') &&
+          results[i].types.includes('political'))
+      ) {
+        console.log(results[i]);
+        return results[i];
+      }
+    }
+    return;
+  }
   drawCircles(countries) {
-    for (const country in countries) {
-      this.drawCircle(countries[country]);
+    for (let i = 0; i < countries.length; i++) {
+      setTimeout(async () => {
+        const res = await this.geocodeHandler(countries[i].Country);
+
+        this.drawCircle(countries[i], res.geometry.location);
+      }, 35 * i);
     }
   }
-  drawCircle(country) {
+  drawCircle(country, position) {
     const casesCircle = new google.maps.Circle({
       strokeColor: '#FF0000',
       strokeOpacity: 0.8,
@@ -44,13 +64,13 @@ export class GoogleMap {
       fillColor: '#FF0000',
       fillOpacity: 0.35,
       map: this._map,
-      center: country.center,
-      radius: Math.sqrt(country.cases) * 200,
+      center: position,
+      radius: Math.sqrt(country.TotalConfirmed) * 200,
     });
   }
-  countZoom({ results }) {
-    const northeast = results[0].geometry.bounds.northeast;
-    const southwest = results[0].geometry.bounds.southwest;
+  countZoom(result) {
+    const northeast = result.geometry.bounds.northeast;
+    const southwest = result.geometry.bounds.southwest;
     const temp = Math.sqrt(
       Math.pow(northeast.lat - southwest.lat, 2) +
         Math.pow(northeast.lng - southwest.lng, 2),
