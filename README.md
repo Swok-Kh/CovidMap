@@ -2,4 +2,4 @@
 
 In developing...
 
-https://github.com/Swok-Kh/CovidMap.git
+https://swok-kh.github.io/CovidMap/
