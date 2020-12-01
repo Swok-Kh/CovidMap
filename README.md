@@ -1,3 +1,0 @@
-# CovidMap
-
-In developing...
