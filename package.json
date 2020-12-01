@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Swok-Kh/covidmap.git"
+    "url": "git+https://github.com/Swok-Kh/CovidMap.git"
   },
   "author": "Serhii Demchenko",
   "license": "MIT",
