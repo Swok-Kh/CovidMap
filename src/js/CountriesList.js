@@ -1,13 +1,11 @@
 import countryListTemplate from '../templates/listOfCountries.hbs';
 import extendedInfoTemplate from '../templates/extendedInfo.hbs';
 import { requestCovidData } from './Helpers';
-import countries from './countries.json';
 
 export class CountriesList {
   constructor({ selector, extInfoSelector }) {
     this.listRef = document.querySelector(selector);
     this.extInfoRef = document.querySelector(extInfoSelector);
-    this._list = { ...countries };
     this.init();
   }
   init() {
@@ -36,6 +34,7 @@ export class CountriesList {
     this.listRef.innerHTML = countryListTemplate(this._countries);
     this._map.drawCircles(this._countries);
     this.drawExtInfo(this._countries[0]);
+    this._map.panTo(this._countries[0].Country);
   }
   drawExtInfo(country) {
     this.extInfoRef.innerHTML = extendedInfoTemplate(country);
@@ -52,6 +51,6 @@ export class CountriesList {
   clickHandler(e) {
     const country = this.chooseCountry(e.target);
     this.drawExtInfo(this._countries.find(item => item.Country === country));
-    this._map.panToCountry(country);
+    this._map.panTo(country);
   }
 }

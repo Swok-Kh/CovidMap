@@ -11,3 +11,9 @@ export async function requestGeocode(country) {
   );
   return data.json();
 }
+export async function requestGeocodeLatLng(latlng) {
+  const data = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng.lat},${latlng.lng}&key=${GOOGLE_KEY}`,
+  );
+  return data.json();
+}
