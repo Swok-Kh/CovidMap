@@ -41,19 +41,28 @@ export class GoogleMap {
         (results[i].types.includes('locality') &&
           results[i].types.includes('political'))
       ) {
-        console.log(results[i]);
         return results[i];
       }
     }
     return;
   }
   drawCircles(countries) {
+    let timerCount = 0;
     for (let i = 0; i < countries.length; i++) {
-      setTimeout(async () => {
-        const res = await this.geocodeHandler(countries[i].Country);
-
-        this.drawCircle(countries[i], res.geometry.location);
-      }, 35 * i);
+      if (localStorage.getItem(countries[i].Country) !== null) {
+        this.drawCircle(
+          countries[i],
+          JSON.parse(localStorage.getItem(countries[i].Country)).geometry
+            .location,
+        );
+      } else {
+        setTimeout(async () => {
+          const res = await this.geocodeHandler(countries[i].Country);
+          localStorage.setItem(countries[i].Country, JSON.stringify(res));
+          this.drawCircle(countries[i], res.geometry.location);
+        }, timerCount);
+        timerCount += 35;
+      }
     }
   }
   drawCircle(country, position) {
