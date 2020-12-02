@@ -1,0 +1,11 @@
+.header {
+  grid-area: header;
+
+  height: $header-height;
+  background-color: $primary-dark-background;
+  padding: 22px 40px;
+
+  &__link {
+    @extend %reset-link;
+  }
+}

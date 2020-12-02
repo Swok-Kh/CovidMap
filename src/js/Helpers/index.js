@@ -17,3 +17,16 @@ export async function requestGeocodeLatLng(latlng) {
   );
   return data.json();
 }
+
+// Getting max value and target value, and calculating color in HEX from orange to red.
+// For zero value returning green color
+export function calculateColor(targetValue, maxValue) {
+  const x = Math.round((255 * targetValue) / maxValue);
+  if (x === 0) return `#b2ff00`;
+  if (x <= 255) return `#ff${colorToHex(255 - x)}00`;
+  if (x > 255) return '#ff0000';
+}
+function colorToHex(num) {
+  const x = num.toString(16);
+  return x.length === 1 ? '0' + x : x;
+}

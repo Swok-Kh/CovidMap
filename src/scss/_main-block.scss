@@ -1,0 +1,33 @@
+.main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+}
+.countries-list-wrapper {
+  overflow-y: auto;
+}
+.countries-list {
+  @extend %reset-list;
+}
+.country {
+  background-color: $secondary-background;
+  cursor: pointer;
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+  }
+  &__title--accent {
+    opacity: 0.6;
+  }
+  &:nth-child(2n + 2) {
+    background-color: $secondary-light-background;
+  }
+  &:focus-within,
+  &:hover {
+    color: $accent-color;
+    & .country__title--accent {
+      opacity: 1;
+    }
+  }
+}

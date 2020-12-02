@@ -1,6 +1,10 @@
 import mapStyle from './mapStyle.json';
-import { GOOGLE_KEY, requestGeocode, requestGeocodeLatLng } from './Helpers';
-import { info } from 'autoprefixer';
+import {
+  GOOGLE_KEY,
+  requestGeocode,
+  requestGeocodeLatLng,
+  calculateColor,
+} from './Helpers';
 
 export class GoogleMap {
   constructor({ mapId }) {
@@ -12,6 +16,7 @@ export class GoogleMap {
       center: { lat: 0, lng: 0 },
       zoom: 4,
       styles: mapStyle,
+      disableDefaultUI: true,
     });
   }
   scriptInit() {
@@ -85,7 +90,7 @@ export class GoogleMap {
     }, delay);
   }
   drawCircle(country, position) {
-    const color = this.calculateColor(country.TotalConfirmed);
+    const color = calculateColor(country.TotalConfirmed, this._maxCases);
     const casesCircle = new google.maps.Circle({
       strokeColor: color,
       strokeOpacity: 0.8,
@@ -104,16 +109,6 @@ export class GoogleMap {
 
     //   infowindow.open(this.map, casesCircle);
     // });
-  }
-  calculateColor(value) {
-    const x = Math.round((255 * value) / this._maxCases);
-    if (x === 0) return `#b2ff00`;
-    if (x <= 255) return `#ff${this.colorToHex(255 - x)}00`;
-    if (x > 255) return '#ff0000';
-  }
-  colorToHex(num) {
-    const x = num.toString(16);
-    return x.length === 1 ? '0' + x : x;
   }
   calculateZoom(result) {
     const northeast = result.geometry.bounds.northeast;

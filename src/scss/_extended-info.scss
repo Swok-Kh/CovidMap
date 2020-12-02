@@ -1,0 +1,14 @@
+.extended-info {
+  position: absolute;
+  top: calc(#{$header-height} + 10px);
+  right: 10px;
+  opacity: 0.8;
+  padding: 10px;
+  background-color: $secondary-dark-background;
+  &__list {
+    @extend %reset-list;
+  }
+  &__text--accent {
+    font-style: italic;
+  }
+}

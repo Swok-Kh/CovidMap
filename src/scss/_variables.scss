@@ -8,14 +8,42 @@ $secondary-dark-background: #102027;
 
 $primary-text-color: #ffffff;
 
-$primary-font-size: 24px;
-$large-font-size: 36px;
-$small-font-size: 20px;
+$accent-color: #c1d5e0;
+
+$mobile: 479px;
+$tablet: 767px;
+$big-tablet: 991px;
+$desktop: 1280px;
+
+$font-small-mobile: 14px;
+$font-mobile: 16px;
+$font-tablet: 16px;
+$font-big-tablet: 18px;
+$font-desktop: 20px;
+
+$header-height: 80px;
+$footer-height: 50px;
+
+%font {
+  font-size: $font-small-mobile;
+
+  @media screen and (min-width: $mobile) {
+    font-size: $font-mobile;
+  }
+  @media screen and (min-width: $tablet) {
+    font-size: $font-tablet;
+  }
+  @media screen and (min-width: $big-tablet) {
+    font-size: $font-big-tablet;
+  }
+  @media screen and (min-width: $desktop) {
+    font-size: $font-desktop;
+  }
+}
 
 body {
   color: $primary-text-color;
   background-color: $primary-background;
-  font-size: $primary-font-size;
 }
 p,
 ul,
@@ -26,10 +54,20 @@ h3,
 h4,
 h5,
 h6 {
+  @extend %font;
+
   margin: 0;
   padding: 0;
 }
 
 %reset-list {
   list-style: none;
+}
+%reset-link {
+  text-decoration: none;
+  color: inherit;
+  &:hover,
+  &:focus {
+    color: $accent-color;
+  }
 }
